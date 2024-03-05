@@ -84,7 +84,8 @@ int __cdecl main(int argc, const char **argv, const char **envp)
     free(ptr);
   }
   return 0;
-}```
+}
+```
 
 Vulnerability:
 https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20201043.png
@@ -202,7 +203,7 @@ r.interactive()
 
 # osu{1_h4te_c!!!!!!!!}
 ```
-
+```sh
 $ python3 solve.py
 [*] '/mnt/c/Users/Tuan/OneDrive/Desktop/pwn/2024/Osu ctf/miss-analyzer/libc.so.6'
     Arch:     amd64-64-little
@@ -250,3 +251,5 @@ $ cat flag.txt
 osu{1_h4te_c!!!!!!!!}
 [*] Got EOF while reading in interactive
 $
+```
+```
