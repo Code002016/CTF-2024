@@ -88,7 +88,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 ```
 
 **Vulnerability:**
-https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20201043.png
+![image](https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20201043.png)
 The program reads the output from the following command "xxd -p -c0 replay.osr | ./analyzer" to get the hash, player name, etc...
 At first, when doing this challenge, I was quite stuck because I used another person's osu replay file with a quite short player name so I could almost only leak information but could not record it, so I downloaded osu to play and do it myself. Create a record with playername "code016hiro1901" with 15 writable characters.
 The formatted position is Player name, but Osu allows creating a player name that is not too long so it cannot be written much, however we can take advantage of the hash to write it.
