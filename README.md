@@ -1,1 +1,1 @@
-CTF 2024
+Pwnable CTF 2024
