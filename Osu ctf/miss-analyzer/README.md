@@ -87,6 +87,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 }
 ```
 <font face="Cambria" size="40">**Vulnerability:**  </font>
+
 ![image](https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20201043.png)  
 
 The program reads the output from the following command "xxd -p -c0 replay.osr | ./analyzer" to get the hash, player name, etc...  
