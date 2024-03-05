@@ -92,11 +92,18 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 
 The program reads the output from the following command "xxd -p -c0 replay.osr | ./analyzer" to get the hash, player name, etc...  
 At first, when doing this challenge, I was quite stuck because I used another person's osu replay file with a quite short player name so I could almost only leak information but could not record it, so I downloaded osu to play and do it myself. Create a record with playername "code016hiro1901" with 15 writable characters.  
-The formatted position is Player name, but Osu allows creating a player name that is not too long so it cannot be written much, however we can take advantage of the hash to write it.
+The formatted position is Player name, but Osu allows creating a player name that is not too long so it cannot be written much, however we can take advantage of the hash to write it.  
+I thought I could use one-gadget to solve it (I haven't tried it yet), but I tried it locally and it didn't work, so I just gave up and played ret2libc = format string.  
 
+**Solution:**  
+**Step 1:** Create or find a replay of osu with a player name long enough to format.  
+**Step 2**: The command provided by the program does not match the required program format, so I edited the command's output processing a bit. I have the entire definition in the getoutput() function.  
+**Step 3:** File processing: I copy the original to another file, and when editing the player name or hash, I must keep the correct length. Specifically, how do I define setup_payload().  
+**Step 4:** Set up libc leak payload and necessary addresses such as pop rdi ret, system, "/bin/sh",... if you don't know how to find libc version serch, here **https://libc. blukat.me/** is a website I often use.  
+**Step 5:** Write the address that needs to be edited in "hash" and format it in printf(playername), the address that needs to be edited here I use the address containing __libc_start_call_main+128 on the stack, I overwrite it so that when the program outputs normally Normally it will call this address and execute.  
+**Step 6:** Waiting for the program to return to the getline, I randomly enter any bytes for the program to output and execute the call system("/bin/sh") that I passed in.  
 
-
-
+**Script exploit:** 
 ```python
 from pwn import *
 context.log_level = 'info'
@@ -204,9 +211,11 @@ r.interactive()
 
 # osu{1_h4te_c!!!!!!!!}
 ```
+
+**Result:** 
 ```sh
 $ python3 solve.py
-[*] '/mnt/c/Users/Tuan/OneDrive/Desktop/pwn/2024/Osu ctf/miss-analyzer/libc.so.6'
+[*] 'Osu ctf/miss-analyzer/libc.so.6'
     Arch:     amd64-64-little
     RELRO:    Partial RELRO
     Stack:    Canary found
@@ -252,5 +261,4 @@ $ cat flag.txt
 osu{1_h4te_c!!!!!!!!}
 [*] Got EOF while reading in interactive
 $
-```
 ```
