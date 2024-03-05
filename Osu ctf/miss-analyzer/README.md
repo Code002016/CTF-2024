@@ -1,12 +1,12 @@
-<font face="Cambria" size="25">Writeup: Pwn Challenge - miss-analyzer </font>
+**<font face="Cambria" size="25">Writeup: Pwn Challenge - miss-analyzer </font>**
 
-<font face="Cambria" size="25">Challenge Infomation </font>
+**<font face="Cambria" size="25">Challenge Infomation </font>**
 
 I bet you can't beat a single one of my plays!
 binary: https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/analyzer
 server: nc chal.osugaming.lol 7273
 
-<font face="Cambria" size="25">Analysis </font>
+**<font face="Cambria" size="25">Analysis </font>**
 
 ```c
 int __cdecl main(int argc, const char **argv, const char **envp)
@@ -87,7 +87,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 }
 ```
 
-Vulnerability:
+**Vulnerability:**
 https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20201043.png
 The program reads the output from the following command "xxd -p -c0 replay.osr | ./analyzer" to get the hash, player name, etc...
 At first, when doing this challenge, I was quite stuck because I used another person's osu replay file with a quite short player name so I could almost only leak information but could not record it, so I downloaded osu to play and do it myself. Create a record with playername "code016hiro1901" with 15 writable characters.
