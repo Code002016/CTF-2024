@@ -95,7 +95,8 @@ At first, when doing this challenge, I was quite stuck because I used another pe
 The formatted position is Player name, but Osu allows creating a player name that is not too long so it cannot be written much, however we can take advantage of the hash to write it.  
 I thought I could use one-gadget to solve it (I haven't tried it yet), but I tried it locally and it didn't work, so I just gave up and played ret2libc = format string.  
 
-<font face="Cambria" size="40">**Solution: **</font>
+<font face="Cambria" size="40">**Solution:**  </font>
+
 **Step 1:** Create or find a replay of osu with a player name long enough to format.  
 **Step 2**: The command provided by the program does not match the required program format, so I edited the command's output processing a bit. I have the entire definition in the getoutput() function.  
 **Step 3:** File processing: I copy the original to another file, and when editing the player name or hash, I must keep the correct length. Specifically, how do I define setup_payload().  
