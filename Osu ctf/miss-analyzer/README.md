@@ -5,6 +5,8 @@
 I bet you can't beat a single one of my plays!  
 Binary: https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/analyzer  
 Server: nc chal.osugaming.lol 7273  
+Checksec:  
+![image](https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20222344.png)  
 
 <font face="Cambria" size="40">**Analysis** </font>
 
