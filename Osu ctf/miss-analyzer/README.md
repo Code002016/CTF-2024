@@ -99,7 +99,7 @@ I thought I could use one-gadget to solve it (I haven't tried it yet), but I tri
 **Step 1:** Create or find a replay of osu with a player name long enough to format.  
 **Step 2**: The command provided by the program does not match the required program format, so I edited the command's output processing a bit. I have the entire definition in the getoutput() function.  
 **Step 3:** File processing: I copy the original to another file, and when editing the player name or hash, I must keep the correct length. Specifically, how do I define setup_payload().  
-**Step 4:** Set up libc leak payload and necessary addresses such as pop rdi ret, system, "/bin/sh",... if you don't know how to find libc version serch, here **https://libc. blukat.me/** is a website I often use.  
+**Step 4:** Set up libc leak payload and necessary addresses such as pop rdi ret, system, "/bin/sh",... if you don't know how to find libc version serch, here **https://libc.blukat.me/** is a website I often use.  
 **Step 5:** Write the address that needs to be edited in "hash" and format it in printf(playername), the address that needs to be edited here I use the address containing __libc_start_call_main+128 on the stack, I overwrite it so that when the program outputs normally Normally it will call this address and execute.  
 **Step 6:** Waiting for the program to return to the getline, I randomly enter any bytes for the program to output and execute the call system("/bin/sh") that I passed in.  
 
