@@ -1,12 +1,12 @@
-**<font face="Cambria" size="40">Writeup: Pwn Challenge - miss-analyzer </font>**
+<font face="Cambria" size="40">**Writeup: Pwn Challenge - miss-analyzer** </font>
 
-**<font face="Cambria" size="40">Challenge Infomation </font>**
+<font face="Cambria" size="40">**Challenge Infomation** </font>
 
 I bet you can't beat a single one of my plays!  
 Binary: https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/analyzer  
 Server: nc chal.osugaming.lol 7273  
 
-**<font face="Cambria" size="40">Analysis </font>**
+<font face="Cambria" size="40">**Analysis** </font>
 
 ```c
 int __cdecl main(int argc, const char **argv, const char **envp)
@@ -86,7 +86,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   return 0;
 }
 ```
-**<font face="Cambria" size="40">Vulnerability: </font>**
+<font face="Cambria" size="40">**Vulnerability:**  </font>
 ![image](https://github.com/Code002016/PWN-CTF-2024/blob/main/Osu%20ctf/miss-analyzer/image/Screenshot%202024-03-05%20201043.png)  
 
 The program reads the output from the following command "xxd -p -c0 replay.osr | ./analyzer" to get the hash, player name, etc...  
@@ -94,7 +94,7 @@ At first, when doing this challenge, I was quite stuck because I used another pe
 The formatted position is Player name, but Osu allows creating a player name that is not too long so it cannot be written much, however we can take advantage of the hash to write it.  
 I thought I could use one-gadget to solve it (I haven't tried it yet), but I tried it locally and it didn't work, so I just gave up and played ret2libc = format string.  
 
-**<font face="Cambria" size="40">Solution: </font>**
+<font face="Cambria" size="40">**Solution: **</font>
 **Step 1:** Create or find a replay of osu with a player name long enough to format.  
 **Step 2**: The command provided by the program does not match the required program format, so I edited the command's output processing a bit. I have the entire definition in the getoutput() function.  
 **Step 3:** File processing: I copy the original to another file, and when editing the player name or hash, I must keep the correct length. Specifically, how do I define setup_payload().  
@@ -102,7 +102,8 @@ I thought I could use one-gadget to solve it (I haven't tried it yet), but I tri
 **Step 5:** Write the address that needs to be edited in "hash" and format it in printf(playername), the address that needs to be edited here I use the address containing __libc_start_call_main+128 on the stack, I overwrite it so that when the program outputs normally Normally it will call this address and execute.  
 **Step 6:** Waiting for the program to return to the getline, I randomly enter any bytes for the program to output and execute the call system("/bin/sh") that I passed in.  
 
-**<font face="Cambria" size="40">Script exploit: </font>**
+<font face="Cambria" size="40">**Script exploit:** </font>
+
 ```python
 from pwn import *
 context.log_level = 'info'
@@ -211,7 +212,7 @@ r.interactive()
 # osu{1_h4te_c!!!!!!!!}
 ```
 
-**<font face="Cambria" size="40">Result: </font>**
+<font face="Cambria" size="40">**Result:** </font>
 ```sh
 $ python3 solve.py
 [*] 'Osu ctf/miss-analyzer/libc.so.6'
